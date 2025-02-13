@@ -5,8 +5,16 @@ import MessageList from "../../components/MessageList";
 import MessageForm from "../../components/MessageForm";
 
 const Home = () => {
-  const [message, setMessage] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [currentTypingId, setCurrentTypingId] = useState(null);
+
+  const handleSendMessage = (message) => {
+    setMessages((prevMessages) => [
+      ...prevMessages,
+      { text: message, isUser: true },
+      { text: `당신이 입력한 메시지는 : "${message}"`, isUser: false },
+    ]);
+  };
 
   return (
     <MessageWrapper>
@@ -14,11 +22,11 @@ const Home = () => {
         <MessageHead>Chat App</MessageHead>
 
         <MessageBody>
-          <MessageList />
+          <MessageList messages={messages} />
         </MessageBody>
 
         <MessageFooter>
-          <MessageForm />
+          <MessageForm onSendMessage={handleSendMessage} />
         </MessageFooter>
       </MessageContainer>
     </MessageWrapper>
@@ -49,18 +57,12 @@ const MessageHead = styled.div`
 `;
 
 const MessageBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   padding: 20px;
+  max-height: 50vh;
+  overflow: hidden;
+  overflow-y: auto;
 `;
 
-const MessageFooter = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 20px;
-  border-top: 1px solid #d7d7d7;
-`;
+const MessageFooter = styled.div``;
 
 export default Home;
