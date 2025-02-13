@@ -1,11 +1,23 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 
 const MessageList = ({ messages }) => {
+  const messagesEndRef = useRef(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <MessageListContainer>
-      {messages.map((message) => (
-        <MessageBox isUser={message.isUser}>User: {message.text}</MessageBox>
+      {messages.map((message, index) => (
+        <MessageBox
+          key={message.id}
+          isUser={message.isUser}
+          ref={index === messages.length - 1 && messagesEndRef}
+        >
+          {message.isUser ? "User" : "AI"}: {message.text}
+        </MessageBox>
       ))}
     </MessageListContainer>
   );
@@ -18,7 +30,7 @@ const MessageListContainer = styled.div`
 `;
 
 const MessageBox = styled.div`
-  padding: 20px;
+  padding: 10px 20px;
   background: ${(props) => (props.isUser ? "#2979ff" : "#f6f5f7")};
   color: ${(props) => (props.isUser ? "#fff" : "#333")};
   border-radius: ${(props) =>

@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Typing from "react-type-animation";
 import styled from "styled-components";
-import MessageList from "../../components/MessageList";
-import MessageForm from "../../components/MessageForm";
+import MessageList from "../components/MessageList";
+import MessageForm from "../components/MessageForm";
 
 const Home = () => {
   const [messages, setMessages] = useState([]);
   const [currentTypingId, setCurrentTypingId] = useState(null);
 
   const handleSendMessage = (message) => {
+    if (!message.trim()) return;
+
     setMessages((prevMessages) => [
       ...prevMessages,
       { text: message, isUser: true },
