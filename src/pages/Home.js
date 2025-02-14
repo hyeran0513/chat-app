@@ -68,8 +68,9 @@ const Header = styled.div`
 `;
 
 const Body = styled.div`
-  padding: 20px;
-  max-height: 50vh;
+  margin: 20px 0;
+  padding: 0 20px;
+  height: 50vh;
   overflow-y: auto;
 `;
 

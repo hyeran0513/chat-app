@@ -36,7 +36,7 @@ const MessageList = ({ messages, onEndTyping }) => {
 const ListContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 1rem;
 `;
 
 const Message = styled.div`
