@@ -1,70 +1,78 @@
-import React, { useState, useEffect } from "react";
-import Typing from "react-type-animation";
+import React, { useState } from "react";
 import styled from "styled-components";
 import MessageList from "../components/MessageList";
 import MessageForm from "../components/MessageForm";
 
 const Home = () => {
   const [messages, setMessages] = useState([]);
-  const [currentTypingId, setCurrentTypingId] = useState(null);
 
   const handleSendMessage = (message) => {
     if (!message.trim()) return;
 
-    setMessages((prevMessages) => [
-      ...prevMessages,
-      { text: message, isUser: true },
-      { text: `당신이 입력한 메시지는 : "${message}"`, isUser: false },
-    ]);
+    const newMessages = [
+      ...messages,
+      { id: Date.now(), text: message, isUser: true },
+      {
+        id: Date.now(),
+        text: `입력한 메시지: "${message}"`,
+        isUser: false,
+        isTyping: true,
+      },
+    ];
+    setMessages(newMessages);
+  };
+
+  const handleEndTyping = (messageId) => {
+    setMessages((prevMessages) =>
+      prevMessages.map((msg) =>
+        msg.id === messageId ? { ...msg, isTyping: false } : msg
+      )
+    );
   };
 
   return (
-    <MessageWrapper>
-      <MessageContainer>
-        <MessageHead>Chat App</MessageHead>
-
-        <MessageBody>
-          <MessageList messages={messages} />
-        </MessageBody>
-
-        <MessageFooter>
+    <Wrapper>
+      <Container>
+        <Header>Chat App</Header>
+        <Body>
+          <MessageList messages={messages} onEndTyping={handleEndTyping} />
+        </Body>
+        <Footer>
           <MessageForm onSendMessage={handleSendMessage} />
-        </MessageFooter>
-      </MessageContainer>
-    </MessageWrapper>
+        </Footer>
+      </Container>
+    </Wrapper>
   );
 };
 
-const MessageWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
 `;
 
-const MessageContainer = styled.div`
-  margin: 0 auto;
+const Container = styled.div`
   max-width: 400px;
   width: 100%;
-  background-color: #fff;
+  background: #fff;
   box-shadow: 0px 14px 24px rgba(0, 0, 0, 0.13);
 `;
 
-const MessageHead = styled.div`
-  padding: 20px 0;
+const Header = styled.div`
+  padding: 20px;
   text-align: center;
   font-weight: bold;
   font-size: 20px;
-  background-color: #f6f5f7;
+  background: #f6f5f7;
 `;
 
-const MessageBody = styled.div`
+const Body = styled.div`
   padding: 20px;
   max-height: 50vh;
-  overflow: hidden;
   overflow-y: auto;
 `;
 
-const MessageFooter = styled.div``;
+const Footer = styled.div``;
 
 export default Home;
