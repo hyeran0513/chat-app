@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import styled from "styled-components";
 import { TypeAnimation } from "react-type-animation";
 
-const MessageList = ({ messages, onEndTyping }) => {
+const MessageList = ({ messages, onEndTyping, currentTypingId }) => {
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
@@ -12,8 +12,8 @@ const MessageList = ({ messages, onEndTyping }) => {
   return (
     <ListContainer>
       {messages.map((message) => (
-        <Message key={message.id} isUser={message.isUser}>
-          {message.isTyping ? (
+        <Message key={message.id} $isUser={message.isUser}>
+          {message.isTyping && message.id === currentTypingId ? (
             <TypeAnimation
               sequence={[
                 `${message.isUser ? "User" : "AI"}: ${message.text}`,
@@ -28,6 +28,7 @@ const MessageList = ({ messages, onEndTyping }) => {
           )}
         </Message>
       ))}
+
       <div ref={messagesEndRef} />
     </ListContainer>
   );
@@ -41,11 +42,11 @@ const ListContainer = styled.div`
 
 const Message = styled.div`
   padding: 10px 20px;
-  background: ${(props) => (props.isUser ? "#2979ff" : "#f6f5f7")};
-  color: ${(props) => (props.isUser ? "#fff" : "#333")};
+  background: ${(props) => (props.$isUser ? "#2979ff" : "#f6f5f7")};
+  color: ${(props) => (props.$isUser ? "#fff" : "#333")};
   border-radius: ${(props) =>
-    props.isUser ? "10px 10px 0 10px" : "10px 10px 10px 0"};
-  align-self: ${(props) => (props.isUser ? "flex-end" : "flex-start")};
+    props.$isUser ? "10px 10px 0 10px" : "10px 10px 10px 0"};
+  align-self: ${(props) => (props.$isUser ? "flex-end" : "flex-start")};
 `;
 
 export default MessageList;
